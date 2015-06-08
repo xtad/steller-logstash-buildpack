@@ -7,6 +7,9 @@ module LogstashPack
 
   def self.detect
     log "hello"
+    ENV.each_pair do |k,v|
+      log "#{k} --> #{v}"
+    end
     if File.exists? "#{OUTPUT_PATH}/logstash.conf"
       "Logstash"
     else
