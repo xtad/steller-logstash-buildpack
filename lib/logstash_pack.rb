@@ -6,6 +6,7 @@ module LogstashPack
   OUTPUT_PATH = ARGV[0]
 
   def self.detect
+    log "hello"
     if File.exists? "#{OUTPUT_PATH}/logstash.conf"
       "Logstash"
     else
@@ -14,7 +15,7 @@ module LogstashPack
   end
 
   def self.compile
-    if File.exists? "#{OUTPUT_PATH}/src/logstash-1.4.0.tar.gz"
+    if File.exists? "#{OUTPUT_PATH}/src/XXXlogstash-1.4.0.tar.gz"
       log "unzipping embedded logstash: #{OUTPUT_PATH}"
       `tar -xzf #{OUTPUT_PATH}/src/logstash-1.4.0.tar.gz -C #{OUTPUT_PATH}`
       
@@ -33,7 +34,7 @@ module LogstashPack
   def self.release
     procfile = {
       "default_process_types" => {
-        "worker" => "./logstash-1.4.0/bin/logstash --verbose -f logstash.conf"
+        "worker" => "./logstash-1.4.0/bin/logstash --verbose -f XXlogstash.conf"
       }
     }.to_yaml
     log "generated procfile: #{procfile}"
