@@ -10,6 +10,10 @@ module LogstashPack
     ENV.each_pair do |k,v|
       log "#{k} --> #{v}"
     end
+    
+    rd = JSON.parse(ENV['RECEIVE_DATA']);
+    log rd['push_metadata']['env']['LOGSTASH_CONF']
+    
     if File.exists? "#{OUTPUT_PATH}/logstash.conf"
       "Logstash"
     else
