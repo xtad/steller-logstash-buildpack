@@ -10,7 +10,7 @@ module LogstashPack
     # determine name of logstash config file from environment
     rd = JSON.parse(ENV['RECEIVE_DATA']);
     @logstashconf = rd['push_metadata']['env']['LOGSTASH_CONF']
-    log "using logstash config of: #{self.logstashconf}"
+    log "using logstash config of: #{@logstashconf}"
     
     if File.exists? "#{OUTPUT_PATH}/logstash.conf"
       "Logstash"
