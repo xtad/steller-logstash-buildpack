@@ -9,7 +9,7 @@ module LogstashPack
     
     # determine name of logstash config file from environment
     rd = JSON.parse(ENV['RECEIVE_DATA']);
-    self.logstashconf = rd['push_metadata']['env']['LOGSTASH_CONF']
+    @logstashconf = rd['push_metadata']['env']['LOGSTASH_CONF']
     log "using logstash config of: #{self.logstashconf}"
     
     if File.exists? "#{OUTPUT_PATH}/logstash.conf"
@@ -39,7 +39,7 @@ module LogstashPack
   def self.release
     procfile = {
       "default_process_types" => {
-        "worker" => "./logstash-1.4.0/bin/logstash --verbose -f #{self.logstashconf}"
+        "worker" => "./logstash-1.4.0/bin/logstash --verbose -f #{@logstashconf}"
       }
     }.to_yaml
     log "generated procfile: #{procfile}"
