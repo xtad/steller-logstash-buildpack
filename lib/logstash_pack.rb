@@ -6,7 +6,7 @@ module LogstashPack
   OUTPUT_PATH = ARGV[0]
 
   def self.detect
-    if File.exists? "#{OUTPUT_PATH}/#{self.getlogstashconf}"
+    if File.exists? "#{OUTPUT_PATH}/logstashconfig"
       "Logstash"
     else
       raise Exception
@@ -33,19 +33,11 @@ module LogstashPack
   def self.release
     procfile = {
       "default_process_types" => {
-        "worker" => "./logstash-1.4.0/bin/logstash --verbose -f #{self.getlogstashconf}"
+        "worker" => "./logstash-1.4.0/bin/logstash --verbose -f `cat logstashconfig`"
       }
     }.to_yaml
     log "generated procfile: #{procfile}"
     procfile
-  end
-  
-  def self.getlogstashconf
-    # determine name of logstash config file from environment
-    rd = JSON.parse(ENV['RECEIVE_DATA']);
-    logstashconf = rd['push_metadata']['env']['LOGSTASH_CONF']
-    log "using logstash config of: #{@logstashconf}"
-    logstashconf
   end
 
   def self.log(message)
