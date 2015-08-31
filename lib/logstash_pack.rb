@@ -33,7 +33,8 @@ module LogstashPack
   def self.release
     procfile = {
       "default_process_types" => {
-        "worker" => "./logstash-1.4.0/bin/logstash --verbose -f `cat logstashconfig`"
+        "worker" => "./logstash-1.4.0/bin/logstash --verbose -f `cat logstashconfig`",
+        "tail" => "node start.js"
       }
     }.to_yaml
     log "generated procfile: #{procfile}"
