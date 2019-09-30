@@ -20,6 +20,12 @@ module LogstashPack
       
       log "patching in sincedb in s3 support"
       `cp #{OUTPUT_PATH}/src/patch/s3.rb #{OUTPUT_PATH}/logstash-1.4.0/lib/logstash/inputs/s3.rb`
+
+      if File.exists? "#{OUTPUT_PATH}/src/patch/elasticsearch_http.rb"
+        log "patching in support for new elasticsearch"
+        `cp #{OUTPUT_PATH}/src/patch/elasticsearch_http.rb #{OUTPUT_PATH}/logstash-1.4.0/lib/logstash/outputs/elasticsearch_http.rb`
+      end
+
       if File.exists? "#{OUTPUT_PATH}/logstash-1.4.0"
         log "unzip complete"
       else
