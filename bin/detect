@@ -1,6 +1,5 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env bash
+# bin/detect <build-dir>
 
-$:.unshift File.expand_path("../../lib", __FILE__)
-require "logstash_pack"
-
-puts LogstashPack.detect
+echo "logstash"
+exit 0

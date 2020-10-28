@@ -1,6 +1,35 @@
-#!/usr/bin/env ruby
+#!/bin/bash
+# bin/compile <build-dir> <cache-dir> <env-dir>
 
-$:.unshift File.expand_path("../../lib", __FILE__)
-require "logstash_pack"
+echo 'Build and Compile Logstash'
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+LOGSTASH_URL=https://steller-logstash.s3.amazonaws.com/logstash-7.9.2.tar.gz
 
-LogstashPack.compile
+mkdir -p $CACHE_DIR
+
+if [[ -f "$CACHE_DIR/logstash-7.9.2.tar.gz" ]]; then
+    echo "Logstash package already detected in cache, skipping download."
+else
+    echo "Downloading Logstash into $CACHE_DIR ..."
+    curl --silent --location $LOGSTASH_URL -o $CACHE_DIR/logstash-7.9.2.tar.gz
+    echo "...done."
+fi
+
+echo "Unzip Logstash..."
+mkdir $BUILD_DIR/logstash
+tar -xzf $CACHE_DIR/logstash-7.9.2.tar.gz --strip 1 -C $BUILD_DIR/logstash
+echo "...done."
+
+if [ -e $ENV_DIR/LOGSTASH_PLUGINS ]
+then
+  PLUGIN_STRING=$(cat $ENV_DIR/LOGSTASH_PLUGINS)
+  echo "Installing plugins:"
+  while IFS=';' read -ra PLUGINS; do
+       for i in "${PLUGINS[@]}"; do
+          $BUILD_DIR/logstash/bin/logstash-plugin install $i
+          echo "* Added: $i"
+       done
+  done <<< "$PLUGIN_STRING"
+fi
